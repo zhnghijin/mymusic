@@ -1,7 +1,17 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path'
+import vue from '@vitejs/plugin-vue';
+
+// function resolve(dir) {
+//   return join(__dirname,dir)
+// }
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()]
+  plugins: [vue()],
+	resolve:{
+		alias:{
+			'@':resolve(__dirname,'src')
+		}
+	}
 })
