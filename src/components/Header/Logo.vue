@@ -10,6 +10,6 @@ export default {
   .logo{
     width: 176px;
     height: 64px;
-    background: url('@/assets/images/sprite_logo.png') no-repeat 0 0;
+    background: url('@/assets/images/sprite_logo.png') no-repeat 0 -5px;
   }
 </style>
