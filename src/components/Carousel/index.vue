@@ -15,120 +15,118 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { MoveTypeEnum,IChangeParam } from './typing'
+import { defineComponent, ref, watch } from "vue";
+import { MoveTypeEnum, IChangeParam } from "./typing";
 
 export default defineComponent({
-  name:'Carousel',
-  props:{
-    listData:{
-      type:Array,
-      required:true
+  name: "Carousel",
+  props: {
+    listData: {
+      type: Array,
+      required: true,
     },
-    autoplay:{
-      type:Boolean,
-      default:false
+    autoplay: {
+      type: Boolean,
+      default: false,
     },
-    interval:{
-      type:[Number,String],
-      default:3000
+    interval: {
+      type: [Number, String],
+      default: 3000,
     },
-    pagination:{
-      type:Boolean,
-      default:false
-    }
-  }
-  setup(props,ctx) {
-    const curIndex = ref<Number>(0)
-    let timer:NodeJS.Timeout | null = null
+    pagination: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props, ctx) {
+    const curIndex = ref<number>(0);
+    let timer: NodeJS.Timeout | null = null;
 
     // 自动播放
-    const autoplayAction = ():void =>{
-      const { interval } = props
-      timer && clearAutoplay()
-      timer = setInterval(():void =>{
-        move(MoveTypeEnum.NEXT)
-      },Number(interval))
-    }
+    const autoplayAction = (): void => {
+      const { interval } = props;
+      timer && clearAutoplay();
+      timer = setInterval((): void => {
+        move(MoveTypeEnum.NEXT);
+      }, Number(interval));
+    };
 
     // 清除定时器
-    const clearAutoplay =():void =>{
-      clearInterval(Number(timer))
-      timer=null
-    }
+    const clearAutoplay = (): void => {
+      clearInterval(Number(timer));
+      timer = null;
+    };
 
     // 向前或向后切换item
-    const move = (type:MoveTypeEnum):void => {
-      const listLengh:number = props.listData.length
-      if(listLengh<=1) return
-      switch(type){
+    const move = (type: MoveTypeEnum): void => {
+      const listLengh: number = props.listData.length;
+      if (listLengh <= 1) return;
+      switch (type) {
         case MoveTypeEnum.NEXT:
-          curIndex.value++
+          curIndex.value++;
           break;
         case MoveTypeEnum.PREV:
-          curIndex.value--
-          break
+          curIndex.value--;
+          break;
         default:
-          return
+          return;
       }
 
-      if(curIndex.value>listLengh-1){
-        curIndex.value = 0
-      }else if(curIndex.value<0){
-        curIndex.value = listLengh -1
+      if (curIndex.value > listLengh - 1) {
+        curIndex.value = 0;
+      } else if (curIndex.value < 0) {
+        curIndex.value = listLengh - 1;
       }
-    }
+    };
 
     // 改变curIndex
-    const changeCurIndex = (e:MouseEvent):void => {
-      const tar = e.target as HTMLElement
+    const changeCurIndex = (e: MouseEvent): void => {
+      const tar = e.target as HTMLElement;
 
-      if(tar.className === 'dot') {
-        const index:number = Number(tar.dataset.index)
-        curIndex.value = index
-        props.autoplay && autoplayAction()
+      if (tar.className === "dot") {
+        const index: number = Number(tar.dataset.index);
+        curIndex.value = index;
+        props.autoplay && autoplayAction();
       }
-    }
+    };
 
     // 切换下一张
-    const moveNext = ():void => {
-      move(MoveTypeEnum.NEXT)
-      props.autoplay && autoplayAction()
-    }
+    const moveNext = (): void => {
+      move(MoveTypeEnum.NEXT);
+      props.autoplay && autoplayAction();
+    };
 
     // 切换上一张
     const movePrev = (): void => {
-      move(MoveTypeEnum.PREV)
-      props.autoplay && autoplayAction()
-    }
+      move(MoveTypeEnum.PREV);
+      props.autoplay && autoplayAction();
+    };
 
     // 监听listData,根据autoplay值，判断是否开启自动轮播
     watch(
-      ()=> props.listData,
-      (newValue,preValue,onInvalidate): void => {
-        newValue.length >1 && props.autoplay && autoplayAction()
-        onInvalidate(()=>[
-          timer && clearAutoplay()
-        ])
+      () => props.listData,
+      (newValue, preValue, onInvalidate): void => {
+        newValue.length > 1 && props.autoplay && autoplayAction();
+        onInvalidate(() => [timer && clearAutoplay()]);
       }
-    )
+    );
 
     // 轮播切换时，向父组件触发change事件
-    watch(curIndex,():void => {
-      const param:IChangeParam = {
-        index:curIndex.value
-      }
-      ctx.emit('change',param)
-    })
+    watch(curIndex, (): void => {
+      const param: IChangeParam = {
+        index: curIndex.value,
+      };
+      ctx.emit("change", param);
+    });
 
     return {
       curIndex,
       changeCurIndex,
       moveNext,
-      movePrev
-    }
+      movePrev,
+    };
   },
-})
+});
 </script>
 
 <style lang="scss" scoped>
@@ -178,7 +176,7 @@ export default defineComponent({
         }
       }
       &::after {
-        content: '';
+        content: "";
         display: inline-block;
         width: 6px;
         height: 6px;

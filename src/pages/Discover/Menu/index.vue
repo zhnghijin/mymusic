@@ -22,3 +22,43 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss" scoped>
+.menu-wrap{
+  width: 100%;
+  background-color: #c20c0c;
+  border-bottom: 1px solid #a40011;
+  .menu-inner {
+    padding-left: 180px;
+    .list-wrap {
+      display: flex;
+      padding-bottom: 5px;
+      .list-item {
+        a {
+          padding:0 17px;
+          font-size: 12px;
+          color:#fff;
+          &.router-link-active {
+            .item-title {
+              background-color: rgba($color:#000,$alpha:0.2);
+            }
+          }
+          .item-title {
+            display: inline-block;
+            padding: 0 13px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 20px;
+          }
+        }
+        &:hover {
+          a {
+            .item-title {
+              background-color: rgba($color: #000,$alpha:0.2);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</style>
