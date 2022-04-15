@@ -12,6 +12,20 @@
           @change="handelCarouselChange"
         />
       </div>
+      <div class="download-wrap">
+        <a href="https://music.163.com/#/download" target="_blank">
+          <img src="@/assets/images/download.png" alt="down">
+          <p>PC 安卓 iPhone WP iPad Mac 六大客户端</p>
+        </a>
+      </div>
+      <div class="controls" v-once>
+        <button class="btn left" @click="testMovePrev()">
+          <img src="@/assets/icons/banner-control-left.png" alt="left">
+        </button>
+        <button class="btn right" @click="carouselRef.moveNext()">
+          <img src="@/assets/icons/banner-control-right.png" alt="right">
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -33,15 +47,14 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const carouselRef = ref(null)
-    const bgUrl = ref<String>('')
+    const carouselRef = ref()
+    const bgUrl = ref<string>('')
 
     /**
      * 轮播切换时的回调
      */
     const handelCarouselChange = ({index}: IChangeParam):void => {
       if(props.bannerList){
-        console.log(props.bannerList,'1');
         const bannerList = props.bannerList 
         bgUrl.value = bannerList[index].imageUrl;
       }
@@ -59,11 +72,66 @@ export default defineComponent({
       }
     );
 
+    const testMovePrev = ():void=>{
+      carouselRef.value.movePrev(); 
+    }
+
     return {
       bgUrl,
       carouselRef,
-      handelCarouselChange
+      handelCarouselChange,
+      testMovePrev
     }
   },
 })
 </script>
+<style lang="scss" scoped>
+.banner-wrap {
+  transition: background 0.6s;
+  .banner-inner {
+    position: relative;
+    display: flex;
+    height: 280px;
+    .carousel-section {
+      width: 730px;
+      height: 100%;
+    }
+    .download-wrap {
+      position: relative; //img + text
+      width: 250px;
+      height: 100%;
+      overflow: hidden;
+      a {
+        display: block;
+      }
+      p {
+        // 待完善
+        position:absolute;
+        bottom:10px;
+        left:5%;
+        transform: translateY(-50%);
+        text-align:center;
+        z-index:1;
+        font-size: 12px;
+        color:#8d8d8d
+      }
+    }
+    .controls {
+      .btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        &:hover {
+          background-color: rgba($color: #000, $alpha: 0.2);
+        }
+        &.left {
+          left:-68px;
+        }
+        &.right {
+          right:-68px;
+        }
+      }
+    }
+  }
+}
+</style>

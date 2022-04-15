@@ -1,17 +1,30 @@
 <template>
   <div class="recommend-wrap">
     <Banner :bannerList="bannerList" />
+    <div class="recommend-inner w-def-container">
+      <section class="inner-left">
+        <Hot :playList="hotPlayList" />
+      </section>
+      <section class="inner-right">
+        <!-- 登录提示 -->
+        <LoginTip />
+        <!-- 入驻歌手 -->
+        <RecomSinger :singerList="singerList" />
+      </section>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import Banner from "./Banner/index.vue";
-import { httpGetBanners, BannerTypeEnum } from "@/requests/recommend";
+import Hot from "./Hot/index.vue";
+import { httpGetBanners, httpGetHotPlayList, BannerTypeEnum } from "@/requests/recommend";
 import { IState } from "./typing";
 
 export default defineComponent({
   components: {
     Banner,
+    Hot
   },
   setup() {
     const state = reactive<IState>({
@@ -24,6 +37,7 @@ export default defineComponent({
 
     onMounted((): void => {
       getBannerList();
+      getHotPlayList()
     });
 
     /**
@@ -32,7 +46,14 @@ export default defineComponent({
     const getBannerList = async () => {
       const { banners } = await httpGetBanners(BannerTypeEnum.PC);
       state.bannerList = banners;
-      console.log(banners, 'banners');
+    };
+
+    /**
+     * 获取热门歌单数据
+     */
+    const getHotPlayList = async () => {
+      const { result } = await httpGetHotPlayList(8);
+      state.hotPlayList = result;
     };
 
     return {
@@ -41,3 +62,21 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.recommend-inner {
+  display: flex;
+  background-color: #fff;
+  .inner-left {
+    flex: 1;
+    padding: 20px;
+    border-left: 1px solid #d3d3d3;
+    border-right: 1px solid #d3d3d3;
+    overflow: hidden;
+  }
+  .inner-right {
+    width: 250px;
+    border-right: 1px solid #d3d3d3;
+  }
+}
+</style>

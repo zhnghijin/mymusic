@@ -3,13 +3,13 @@
     <ul class="list-wrap">
       <template v-for="(item, index) of listData" :key="index">
         <li :class="['carousel-item', { active: index === curIndex }]">
-          <img src="item.imageUrl" class="item-image" alt="banner" />
+          <img :src="item.imageUrl" class="item-image" alt="banner" />
         </li>
       </template>
     </ul>
     <ul class="pagination" v-if="pagination" @click="changeCurIndex($event)">
       <template v-for="(item, index) of listData.length" :key="index">
-        <li :class="['dot', { active: index === curIndex }]"></li>
+        <li :class="['dot', { active: index === curIndex }]" :data-index="index"></li>
       </template>
     </ul>
   </div>
