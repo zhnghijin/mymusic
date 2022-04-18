@@ -4,7 +4,7 @@
       <div class="mask"></div>
       <div class="play-count">
         <i class="iconfont" icon-headset />
-        <span class="count">{{data.playCount}}</span>
+        <span class="count">{{ $filters.formatCount(data.playCount) }}</span>
         <i class="iconfont icon-play-circle" />
       </div>
     </div>

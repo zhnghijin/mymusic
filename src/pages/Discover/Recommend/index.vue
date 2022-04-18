@@ -4,6 +4,7 @@
     <div class="recommend-inner w-def-container">
       <section class="inner-left">
         <Hot :playList="hotPlayList" />
+        <RecomAlbum :albumList="albumList" />
       </section>
       <section class="inner-right">
         <!-- 登录提示 -->
@@ -18,13 +19,18 @@
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import Banner from "./Banner/index.vue";
 import Hot from "./Hot/index.vue";
+import RecomAlbum from "./RecomAlbum/index.vue";
+import LoginTip from "@/components/LoginTip/index.vue";
 import { httpGetBanners, httpGetHotPlayList, BannerTypeEnum } from "@/requests/recommend";
+import { httpGetHotAlbum } from '@/requests/album';
 import { IState } from "./typing";
 
 export default defineComponent({
   components: {
     Banner,
-    Hot
+    Hot,
+    LoginTip,
+    RecomAlbum
   },
   setup() {
     const state = reactive<IState>({
@@ -37,7 +43,8 @@ export default defineComponent({
 
     onMounted((): void => {
       getBannerList();
-      getHotPlayList()
+      getHotPlayList();
+      getHotAlbumList();
     });
 
     /**
@@ -54,6 +61,14 @@ export default defineComponent({
     const getHotPlayList = async () => {
       const { result } = await httpGetHotPlayList(8);
       state.hotPlayList = result;
+    };
+
+    /**
+     * 获取热门新碟数据
+     */
+    const getHotAlbumList = async () => {
+      const { albums } = await httpGetHotAlbum();
+      state.albumList = albums.slice(0, 5);
     };
 
     return {

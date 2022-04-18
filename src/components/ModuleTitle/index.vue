@@ -5,7 +5,7 @@
     <div class="slot-default">
       <slot name="default" />
     </div>
-    <div>
+    <div class="slot-right">
       <slot name="right" />
     </div>
   </div>
